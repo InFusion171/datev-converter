@@ -8,7 +8,7 @@
 - Die Datei muss folgendes [Format](#format) haben.
 
 ## Installation
-- Man kann das gebündelte Programm [hier] herunterladen
+- Man kann das gebündelte Programm [hier](https://github.com/InFusion171/datev-converter/releases/tag/1.0) herunterladen
 
 ## Für Entwickler
 - Python 3.10 oder höher
