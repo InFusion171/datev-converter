@@ -32,15 +32,13 @@ class Transaction:
         return re.sub(r'("";)*$', '', datev_format)
 
     def parse(iban: str, bic: str, input: str):
-        account_owner: str = re.findall(r'Kontoinhaber.*\n', input, flags=re.IGNORECASE)
+        account_owner = re.search('"Kontoinhaber:";"(.*)"\n', input)
 
-        if len(account_owner) == 0:
+        if(account_owner is None):
             account_owner = ''
+
         else:
-            account_owner = account_owner[0]
-            account_owner = re.sub(r'Kontoinhaber', '', account_owner, flags=re.IGNORECASE)
-            account_owner = re.sub(r'[^a-zA-Z\s]', '', account_owner, flags=re.IGNORECASE)
-            account_owner = account_owner.replace('\n', '')
+            account_owner = account_owner.group(1)
 
 
         date_regex = '\d\d.\d\d.\d\d\d\d'
@@ -53,7 +51,7 @@ class Transaction:
         transactions = []
 
         for line in splitted_input:
-            if re.search(f'{transaction_line_regex}', line) is not None:
+            if re.search(transaction_line_regex, line) is not None:
                 transactions.append(line)
 
 
