@@ -1,0 +1,66 @@
+from collections import defaultdict
+import re
+
+class Transaction:
+    def __init__(self, iban: str, bic: str, wertstellungsdatum: str, buchungsdatum: str, umsatz:str, verwendungszweck:str, waerung:str):
+        self.BIC = bic.replace('"', '')
+        self.IBAN = iban.replace('"', '')
+        self.waerung = waerung.replace('"', '')
+        self.wertstellungsdatum = wertstellungsdatum.replace('"', '')
+        self.buchungsdatum = buchungsdatum.replace('"', '')
+        self.umsatz = umsatz.replace('"', '')
+        self.verwendungszweck = verwendungszweck.replace('"', '')
+
+        self.VERWENDUNGSZWECK_FIELD_LENGTH = 27
+        self.VERWENDUNGSZWECK_FIELD_FIELD_COUNT = 10
+
+    def create_datev_format(s) -> str:
+        datev_format = f'"{s.BIC}";"{s.IBAN}";"";"";"{s.wertstellungsdatum}";"{s.buchungsdatum}";"{s.umsatz}";"";"";"";"";'
+
+        verwendungszweck_index = 0
+
+        for i in range(s.VERWENDUNGSZWECK_FIELD_FIELD_COUNT):
+            # DATEV format: verwendungszweck 1-4 | Geschäftsvorgangscode | Währung | Buchungstext | verwendungszweck 5-10
+            if(i == 4):
+                datev_format = datev_format + f'"";"{s.waerung}";"";'
+
+            datev_format = datev_format + f'"{s.verwendungszweck[verwendungszweck_index:verwendungszweck_index + s.VERWENDUNGSZWECK_FIELD_LENGTH]}";'
+
+            verwendungszweck_index = verwendungszweck_index + s.VERWENDUNGSZWECK_FIELD_LENGTH
+
+
+        return re.sub(r'("";)*$', '', datev_format)
+
+    def parse(iban: str, bic: str, input: str):
+        account_owner: str = re.findall(r'Kontoinhaber.*\n', input, flags=re.IGNORECASE)
+
+        if len(account_owner) == 0:
+            return None
+
+        account_owner = account_owner[0]
+        account_owner = re.sub(r'Kontoinhaber', '', account_owner, flags=re.IGNORECASE)
+        account_owner = re.sub(r'[^a-zA-Z\s]', '', account_owner, flags=re.IGNORECASE)
+        account_owner = account_owner.replace('\n', '')
+
+        stripped_header_input = re.sub(r'^"Kontoumsätze.*"Währung"', '', input, flags=re.DOTALL)
+        stripped_input = re.sub(r'"\* noch nicht ausgeführte Umsätze"', '', stripped_header_input)
+
+        transactions = stripped_input.split('\n')
+
+        cleaned_transactions = [t for t in transactions if t.strip()]
+
+        transactions_by_date = defaultdict(list)
+
+        for given_transaction in cleaned_transactions:
+            values = given_transaction.split(';')
+
+            if(len(values) < 5):
+                raise Exception
+
+            datev_transaction = Transaction(iban, bic, values[1], values[0], values[3], values[2], values[4])
+
+            werstellungs_month = values[1].split('.')[1]
+
+            transactions_by_date[werstellungs_month].append(datev_transaction)
+
+        return account_owner, transactions_by_date
