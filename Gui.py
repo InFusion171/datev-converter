@@ -68,7 +68,7 @@ class Gui:
         path:str = fd.askopenfilename(
             title='Datei auswählen',
             initialdir=f'{os.getcwd()}',
-            filetypes=[('Spardabank Überweisungs export', '*.csv')])
+            filetypes=[('Spardabank Überweisungs export', '*.csv'), ('Spardabank Überweisungs export', '*.txt')])
         
         if len(path) == 0:
             return
