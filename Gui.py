@@ -52,7 +52,7 @@ class Gui:
             return 
 
         try:
-           self.account_owner, self.transaction_by_date = Transaction.parse(self.iban_input.get(), self.bic_input.get(), self.content)
+            self.account_owner, self.transaction_by_date = Transaction.parse(self.iban_input.get(), self.bic_input.get(), self.content)
            
         except AttributeError:
             messagebox.showerror("Error", "Zuerst eine Datei auswählen") 

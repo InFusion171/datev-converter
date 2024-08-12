@@ -35,27 +35,35 @@ class Transaction:
         account_owner: str = re.findall(r'Kontoinhaber.*\n', input, flags=re.IGNORECASE)
 
         if len(account_owner) == 0:
-            return None
+            account_owner = ''
+        else:
+            account_owner = account_owner[0]
+            account_owner = re.sub(r'Kontoinhaber', '', account_owner, flags=re.IGNORECASE)
+            account_owner = re.sub(r'[^a-zA-Z\s]', '', account_owner, flags=re.IGNORECASE)
+            account_owner = account_owner.replace('\n', '')
 
-        account_owner = account_owner[0]
-        account_owner = re.sub(r'Kontoinhaber', '', account_owner, flags=re.IGNORECASE)
-        account_owner = re.sub(r'[^a-zA-Z\s]', '', account_owner, flags=re.IGNORECASE)
-        account_owner = account_owner.replace('\n', '')
 
-        stripped_header_input = re.sub(r'^"Kontoumsätze.*"Währung"', '', input, flags=re.DOTALL)
-        stripped_input = re.sub(r'"\* noch nicht ausgeführte Umsätze"', '', stripped_header_input)
+        date_regex = '\d\d.\d\d.\d\d\d\d'
+        umsatz_regex = '\d,\d\d'
 
-        transactions = stripped_input.split('\n')
+        transaction_line_regex = f'.*{date_regex}.*{date_regex}.*{umsatz_regex}.*'
 
-        cleaned_transactions = [t for t in transactions if t.strip()]
+        splitted_input = input.split('\n')
+
+        transactions = []
+
+        for line in splitted_input:
+            if re.search(f'{transaction_line_regex}', line) is not None:
+                transactions.append(line)
+
 
         transactions_by_date = defaultdict(list)
 
-        for given_transaction in cleaned_transactions:
-            values = given_transaction.split(';')
+        for transaction in transactions:
+            values = transaction.split(';')
 
             if(len(values) < 5):
-                raise Exception
+                raise Exception()
 
             datev_transaction = Transaction(iban, bic, values[1], values[0], values[3], values[2], values[4])
 
