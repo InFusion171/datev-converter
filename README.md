@@ -1,7 +1,7 @@
 # DATEV ASCII-Weiterverarbeitungsdatei Konvertierer
 
 ## Übersicht
-- Das Programm dient dazu, exportierte Überweisungsdaten von der Sparda-Bank in eine DATEV-Weiterverarbeitungsdatei umzuwandeln.
+- Das Programm dient dazu, exportierte Überweisungsdaten in eine [DATEV-Weiterverarbeitungsdatei](https://apps.datev.de/help-center/documents/9226961) umzuwandeln.
 - Im Programm gibt man die IBAN und die BIC des Sparda-Bank-Kontos an und wählt die exportierte Überweisungsdatei aus. Die Datei kann entweder eine .csv-Datei oder eine normale .txt-Datei sein.
 - Danach drückt man auf "Generieren". Das Programm erstellt einen Ordner mit dem Namen "KONTOINHABER Überweisungen", falls der KONTOINHABER in der Datei angegeben ist.
   In dem Ordner befinden sich dann die konvertierten Dateien für DATEV, die nach den Monaten des Valutadatums strukturiert sind.
