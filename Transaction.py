@@ -66,7 +66,7 @@ class Transaction:
             datev_transaction = Transaction(iban, bic, values[1], values[0], values[3], values[2], values[4])
 
             valuta_month = values[1].split('.')[1]
-            valuta_year = values[1].split('.')[2]
+            valuta_year = values[1].split('.')[2].replace('"', '')
 
             transactions_by_date[valuta_year+valuta_month].append(datev_transaction)
 
