@@ -13,8 +13,8 @@ class FileCreation:
         
         os.makedirs(DIRECTORY_PATH)
 
-        for voluta_month, transactions in gui.transaction_by_date.items():
-            with open(f'{DIRECTORY_PATH}/{voluta_month} Überweisung.txt', 'w+') as f:
+        for valuta, transactions in gui.transaction_by_date.items():
+            with open(f'{DIRECTORY_PATH}/{valuta} Sparda-Bankumsätze.txt', 'w+') as f:
                 for transaction in transactions:
                     f.write(f'{transaction.create_datev_format()}\n')
 
