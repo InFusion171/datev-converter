@@ -3,8 +3,8 @@ import re
 
 class Transaction:
     def __init__(self, iban: str, bic: str, wertstellungsdatum: str, buchungsdatum: str, umsatz:str, verwendungszweck:str, waerung:str):
-        self.BIC = bic.replace('"', '')
-        self.IBAN = iban.replace('"', '')
+        self.BIC = bic.replace('"', '').replace(' ', '')
+        self.IBAN = iban.replace('"', '').replace(' ', '')
         self.waerung = waerung.replace('"', '')
         self.wertstellungsdatum = wertstellungsdatum.replace('"', '')
         self.buchungsdatum = buchungsdatum.replace('"', '')
@@ -15,7 +15,7 @@ class Transaction:
         self.VERWENDUNGSZWECK_FIELD_FIELD_COUNT = 10
 
     def create_datev_format(s) -> str:
-        datev_format = f'"{s.BIC}";"{s.IBAN}";"";"";"{s.wertstellungsdatum}";"{s.buchungsdatum}";"{s.umsatz}";"";"";"";"";'
+        datev_format = f'"{s.BIC}";"{s.IBAN}";"";"";"{s.wertstellungsdatum}";"{s.buchungsdatum}";{s.umsatz};"";"";"";"";'
 
         verwendungszweck_index = 0
 
