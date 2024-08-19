@@ -1,6 +1,6 @@
 import os
 from tkinter import messagebox
-
+from Transaction import sort_by_buchungstag
 
 class FileCreation:
     @staticmethod
@@ -15,7 +15,7 @@ class FileCreation:
 
         for valuta, transactions in gui.transaction_by_date.items():
             with open(f'{DIRECTORY_PATH}/{valuta} Sparda-Bankumsätze.txt', 'w+') as f:
-                for transaction in transactions:
+                for transaction in sort_by_buchungstag(transactions):
                     f.write(f'{transaction.create_datev_format()}\n')
 
         messagebox.showinfo('Erfolgreich', f'Überweisungen von {gui.account_owner} in "{os.getcwd()}" erstellt')

@@ -1,6 +1,8 @@
 from collections import defaultdict
 import re
 
+import datetime
+
 class Transaction:
     def __init__(self, iban: str, bic: str, wertstellungsdatum: str, buchungsdatum: str, umsatz:str, verwendungszweck:str, waerung:str):
         self.BIC = bic.replace('"', '').replace(' ', '')
@@ -71,3 +73,6 @@ class Transaction:
             transactions_by_date[valuta_year+valuta_month].append(datev_transaction)
 
         return account_owner, transactions_by_date
+
+def sort_by_buchungstag(transactions: list[Transaction]):
+    return sorted(transactions, key=lambda x: datetime.datetime.strptime(x.buchungsdatum, '%d.%m.%Y'))
