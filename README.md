@@ -7,9 +7,6 @@
   In dem Ordner befinden sich dann die konvertierten Dateien für DATEV, die nach den Monaten des Valutadatums strukturiert sind.
 - Die Datei muss folgendes [Format](#format) haben.
 
-## Installation
-- Man kann das gebündelte Programm [hier](https://github.com/InFusion171/datev-converter/releases/tag/1.0) herunterladen
-
 ## Für Entwickler
 - Python 3.10 oder höher
 
