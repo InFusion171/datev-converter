@@ -8,7 +8,7 @@
 - Die Datei muss folgendes [Format](#format) haben.
 
 ## Für Entwickler
-- Python 3.10 oder höher
+- Python 3.12 oder höher
 
 - Zu installierende Python-Packete:
     - tk 
